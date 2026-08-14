@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
-interface RequestWithUser extends Request {
+export interface RequestWithUser extends Request {
   user?: { id: string; email: string };
 }
 

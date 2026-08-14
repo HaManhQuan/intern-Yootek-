@@ -20,7 +20,8 @@ export class UsersService {
   }
 
   async findAll() {
-    return this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany();
+    return users.map(({ password, ...rest }) => rest);
   }
 
   async findOne(id: string) {
@@ -28,7 +29,8 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    return user;
+    const { password, ...result } = user;
+    return result;
   }
 
   async findByEmail(email: string) {
@@ -41,10 +43,12 @@ export class UsersService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     await this.findOne(id);
-    return this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       where: { id },
       data: { ...updateUserDto },
     });
+    const { password, ...result } = updatedUser;
+    return result;
   }
 
   async remove(id: string) {
