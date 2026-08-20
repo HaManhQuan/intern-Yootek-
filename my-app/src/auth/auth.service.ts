@@ -24,7 +24,11 @@ export class AuthService {
     if (!isMatch) {
       throw new UnauthorizedException('Email hoặc mật khẩu không đúng');
     }
-    const token = this.jwtService.sign({ id: user.id, email: user.email });
+    const token = this.jwtService.sign({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    });
     return { access_token: token };
   }
 }

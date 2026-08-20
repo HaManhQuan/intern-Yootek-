@@ -1,8 +1,8 @@
 import { Controller, Req, Get, Post, UseGuards, Body } from '@nestjs/common';
-import { AuthGuard } from '../auth/guard/auth.guard';
+import { AuthGuard } from '../auth/guards/auth.guard';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { ProfilesService } from './profiles.service';
-import type { RequestWithUser } from '../auth/guard/auth.guard';
+import type { RequestWithUser } from '../auth/guards/auth.guard';
 
 @Controller('profiles')
 export class ProfilesController {

@@ -18,6 +18,7 @@ model User {
   name           String
   email          String  @unique
   password       String
+  role           Role    @default(USER)
   profile Profile?
   posts Posts[]
 }
@@ -36,4 +37,8 @@ model Posts {
   title          String
   content        String
   user User @relation(fields: [userId], references: [id])
+}
+enum Role {
+  ADMIN
+  USER
 }
