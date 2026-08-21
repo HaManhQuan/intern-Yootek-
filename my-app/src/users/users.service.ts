@@ -19,9 +19,21 @@ export class UsersService {
     });
   }
 
-  async findAll() {
-    const users = await this.prisma.user.findMany();
-    return users.map(({ password, ...rest }) => rest);
+  async findAll(page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+
+    const [items, total] = await Promise.all([
+      this.prisma.user.findMany({ skip, take: limit }),
+      this.prisma.user.count(),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findOne(id: string) {
@@ -29,8 +41,7 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    const { password, ...result } = user;
-    return result;
+    return user;
   }
 
   async findByEmail(email: string) {
@@ -47,8 +58,7 @@ export class UsersService {
       where: { id },
       data: { ...updateUserDto },
     });
-    const { password, ...result } = updatedUser;
-    return result;
+    return updatedUser;
   }
 
   async remove(id: string) {
@@ -58,3 +68,6 @@ export class UsersService {
     });
   }
 }
+
+// ky thuat phan trang
+// boc toan bo res ve 1 chuan cho fe
