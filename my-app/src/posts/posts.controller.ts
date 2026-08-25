@@ -17,32 +17,38 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Role } from '../../generated/prisma/client';
+import { ApiBearerAuth } from '@nestjs/swagger';
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
   @Post()
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   create(@Body() dto: CreatePostDto, @Req() req: RequestWithUser) {
     const userId = req.user!.id;
     return this.postsService.create(dto, userId);
   }
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get()
   findAll() {
     return this.postsService.findAll();
   }
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(id);
   }
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
   @Roles(Role.ADMIN)
   @Put(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(id, updatePostDto);
   }
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
   @Roles(Role.ADMIN)
   @Delete(':id')
   async remove(@Param('id') id: string) {

@@ -15,6 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserResponseEntity } from './entities/user-response.entity';
 import { OwnerOrAdminGuard } from 'src/auth/guards/owner-or-admin.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -26,6 +27,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get()
   async findAll(@Query('page') page: string, @Query('limit') limit: string) {
     const result = await this.usersService.findAll(
@@ -39,6 +41,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard, OwnerOrAdminGuard)
+  @ApiBearerAuth()
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);
@@ -46,6 +49,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard, OwnerOrAdminGuard)
+  @ApiBearerAuth()
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const user = await this.usersService.update(id, updateUserDto);
@@ -53,21 +57,10 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard, OwnerOrAdminGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   async remove(@Param('id') id: string) {
     await this.usersService.remove(id);
     return { message: `User ${id} deleted successfully` };
   }
 }
-
-// class UserService {
-
-//   private notiService: NotiService;
-
-//   constructor(notiService: NotiService){
-//     this.notiService = notiService
-//   }
-
-// }
-
-// const userSv = new UserService(notiSv)
