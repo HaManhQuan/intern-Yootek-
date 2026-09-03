@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { PostsModule } from './posts/posts.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { validate } from './config/env.validation';
+import { MqttModule } from './mqtt/mqtt.module';
+import { EventsModule } from './events/events.module';
 @Module({
   imports: [
     UsersModule,
@@ -13,6 +15,8 @@ import { validate } from './config/env.validation';
     AuthModule,
     PostsModule,
     ProfilesModule,
+    MqttModule,
+    EventsModule,
   ],
 })
 export class AppModule implements NestModule {
