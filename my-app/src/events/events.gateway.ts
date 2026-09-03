@@ -7,7 +7,6 @@ export class EventsGateway {
   server: Server;
 
   sendSensorData(data: any) {
-    console.log('Emitting via WebSocket:', data);
     this.server.emit('sensorData', data);
   }
 }
