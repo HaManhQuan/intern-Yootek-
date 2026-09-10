@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String   @id @default(uuid())
+  name           String
+  email          String   @unique
+  password       String
+  role           Role     @default(USER)
+  gardens         Garden[]
+}
+
+model Garden {
+  id             String   @id @default(uuid())
+  name           String
+  userId         String
+  user User @relation(fields: [userId], references: [id])
+  vegetables Vegetable[]
+  sensorData SensorData[]
+  sales Sale[]
+}
+
+model Vegetable {
+  id                String   @id @default(uuid())
+  name              String
+  gardenId          String
+  sales Sale[]
+  price             Int
+  importedQuantity  Int
+  soldQuantity      Int
+  garden Garden @relation(fields: [gardenId], references: [id])
+}
+
+model Sale {
+  id            String   @id @default(uuid())
+  quantity      Int
+  totalAmount   Float
+  sellTime      DateTime @default(now())
+  vegetableId   String
+  gardenId      String
+  garden Garden @relation(fields: [gardenId], references: [id])
+  vegetable Vegetable @relation(fields: [vegetableId], references: [id])
+}
+
+model SensorData {
+  moisture       Float
+  temperature    Float
+  id             String   @id @default(uuid())
+  @@index([gardenId, createdAt])
+  createdAt      DateTime @default(now())
+  gardenId       String
+  garden Garden @relation(fields: [gardenId], references: [id])
+
+}
+enum Role {
+  ADMIN
+  USER
+}
