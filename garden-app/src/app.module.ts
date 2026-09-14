@@ -7,6 +7,7 @@ import { validate } from './config/env.validation';
 import { MqttModule } from './mqtt/mqtt.module';
 import { EventsModule } from './events/events.module';
 import { GardensModule } from './gardens/gardens.module';
+import { VegetablesModule } from './vegetables/vegetables.module';
 @Module({
   imports: [
     UsersModule,
@@ -15,6 +16,7 @@ import { GardensModule } from './gardens/gardens.module';
     MqttModule,
     EventsModule,
     GardensModule,
+    VegetablesModule,
   ],
 })
 export class AppModule implements NestModule {
